@@ -1,0 +1,9 @@
+{
+  "name": "totjo-holocron-announcements",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "check": "node scripts/validate.mjs"
+  }
+}

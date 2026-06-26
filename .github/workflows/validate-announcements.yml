@@ -1,0 +1,18 @@
+name: Validate announcements feed
+
+on:
+  push:
+    branches: [main]
+    paths: ['announcements.json', 'scripts/validate.mjs', 'package.json']
+  pull_request:
+    paths: ['announcements.json']
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/validate.mjs
