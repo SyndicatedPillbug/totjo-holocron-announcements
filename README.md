@@ -21,9 +21,10 @@ https://syndicatedpillbug.github.io/totjo-holocron-announcements/announcements.j
    node scripts/validate.mjs
    ```
 8. Commit and push.
-9. GitHub Actions runs validation automatically.
-10. GitHub Pages deploys the updated file (1–2 minutes).
-11. Installed apps fetch the new feed next time they open.
+9. GitHub Pages deploys the updated file (1–2 minutes).
+10. Installed apps fetch the new feed next time they open.
+
+> **Note:** A validation workflow (`.github/workflows/validate-announcements.yml`) is staged locally but not yet pushed. See "GitHub Actions setup" below.
 
 ## Validation
 
@@ -62,6 +63,28 @@ node scripts/validate.mjs path/to/announcements.json
 ## GitHub Actions
 
 On every push or pull request that changes `announcements.json`, a workflow runs the validation script. If validation fails, the workflow fails and the file is not deployed.
+
+## GitHub Actions setup
+
+A validation workflow file exists locally at `.github/workflows/validate-announcements.yml`. It runs `node scripts/validate.mjs` on every push that changes `announcements.json`.
+
+### To enable
+
+The workflow file is not yet pushed because the current git token lacks the required `workflow` scope. To push it, use a token with that scope:
+
+1. Create a [classic personal access token](https://github.com/settings/tokens) with the `workflow` scope.
+2. Push from the repo root:
+   ```sh
+   git add .github/workflows/validate-announcements.yml
+   git commit -m "ci: validate announcements feed on push"
+   git remote set-url origin https://<YOUR_PAT>@github.com/SyndicatedPillbug/totjo-holocron-announcements.git
+   git push origin main
+   ```
+3. After push, the workflow runs on every subsequent push that changes `announcements.json`.
+
+### What it checks
+
+The workflow runs the same validation as the local script — JSON structure, required fields, safe hrefs, no duplicate IDs. If validation fails, the workflow fails and the push is blocked from being deployed.
 
 ## How GitHub Pages publishes
 
